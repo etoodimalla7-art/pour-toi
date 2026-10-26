@@ -138,6 +138,7 @@ dialog .fermer{margin-top:1rem}
   .carte .corps{max-height:none;opacity:1}
 }
 </style>
+<noscript><style>.reveal,.derniere-phrase,#intro .texte,#intro .btn{opacity:1!important;transform:none!important}#intro{display:none}#p1,#p2,#p3,#p4,#p5{opacity:1!important}</style></noscript>
 </head>
 <body>
 
@@ -343,6 +344,13 @@ dialog .fermer{margin-top:1rem}
   var CONFIG = { musique: "" }; // ex. "musique/piano.mp3" (fichier libre de droits ou autorisé)
 
   var reduit = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Compatibilité : navigateurs ou applications intégrées sans IntersectionObserver (ex. certains navigateurs WhatsApp anciens)
+  if(!("IntersectionObserver" in window)){
+    window.IntersectionObserver=function(cb){ this.cb=cb; };
+    window.IntersectionObserver.prototype.observe=function(el){ this.cb([{isIntersecting:true,target:el}],this); };
+    window.IntersectionObserver.prototype.unobserve=function(){};
+  }
 
   // Étoiles discrètes (intro et dernier écran)
   function etoiles(conteneur, n){
