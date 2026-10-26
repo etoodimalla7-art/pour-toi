@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Même à des kilomètres, c'est toujours toi.</title>
+<meta name="description" content="Une petite surprise, créée pour toi.">
+<meta property="og:title" content="Même à des kilomètres, c'est toujours toi.">
+<meta property="og:description" content="Une petite surprise, créée pour toi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --nuit:#100D12; --bordeaux:#70263A; --rose:#E8C6CC; --ivoire:#F8F0E8; --or:#D7B77A;
+  --texte-sombre:#F8F0E8; --texte-clair:#2a1d24;
+  --serif:"Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --sans:"DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--sans);font-weight:300;line-height:1.7;background:var(--nuit);color:var(--texte-sombre);overflow-x:hidden}
+img{max-width:100%;display:block}
+h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.15;margin:0 0 .6em}
+h1{font-size:clamp(2.4rem,8vw,5rem)}
+h2{font-size:clamp(1.9rem,5.5vw,3.4rem)}
+h3{font-size:clamp(1.4rem,4vw,1.9rem)}
+p{margin:0 0 1em}
+em,.italique{font-family:var(--serif);font-style:italic}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:1px solid var(--or);outline-offset:4px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Barre de progression */
+#progress{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--bordeaux),var(--or));z-index:50;transition:width .15s linear}
+
+/* Navigation discrète */
+#nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:12px;z-index:40}
+#nav a{width:8px;height:8px;border-radius:50%;border:1px solid var(--or);opacity:.45;transition:opacity .3s,background .3s}
+#nav a.actif,#nav a:hover{opacity:1;background:var(--or)}
+@media (max-width:600px){#nav{display:none}}
+
+/* Intro */
+#intro{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;background:radial-gradient(circle at 50% 55%,#3a2330 0%,var(--nuit) 60%);transition:opacity 1.6s ease,visibility 1.6s}
+#intro.sortie{opacity:0;visibility:hidden}
+.etoile{position:absolute;width:2px;height:2px;border-radius:50%;background:var(--ivoire);opacity:.5}
+#intro .texte{opacity:0;transform:translateY(10px);transition:opacity 1.4s ease,transform 1.4s ease;font-family:var(--serif);font-style:italic;font-size:clamp(1.4rem,4.5vw,2.2rem);max-width:22ch;margin:.4em 0}
+#intro .texte.visible{opacity:1;transform:none}
+#intro .texte.petit{font-size:clamp(1.1rem,3.5vw,1.5rem);opacity:0}
+#intro .texte.petit.visible{opacity:.8}
+.btn{display:inline-block;margin-top:2rem;padding:.9rem 2rem;border:1px solid var(--or);border-radius:999px;background:transparent;font-family:var(--serif);font-size:1.2rem;letter-spacing:.02em;transition:background .4s,color .4s,transform .3s}
+.btn:hover{background:var(--or);color:var(--nuit)}
+.btn:active{transform:scale(.98)}
+#intro .btn{opacity:0;transition:opacity 1s ease .3s,background .4s,color .4s}
+#intro .btn.visible{opacity:1}
+#musique{position:fixed;left:14px;bottom:calc(14px + var(--safe-bottom));z-index:45;padding:.5rem .9rem;font-size:.85rem;border:1px solid rgba(215,183,122,.5);border-radius:999px;background:rgba(16,13,18,.6);backdrop-filter:blur(6px);display:none}
+#musique.actif{display:block}
+
+/* Sections */
+section{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:clamp(4rem,10vh,7rem) clamp(1.4rem,6vw,6rem);padding-top:calc(clamp(4rem,10vh,7rem) + var(--safe-top))}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity 1.6s ease,transform 1.6s ease}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.6s}.reveal.d2{transition-delay:1.4s}.reveal.d3{transition-delay:2.2s}
+.container{max-width:760px;margin:0 auto;width:100%}
+.centre{text-align:center}
+.ivoire{background:var(--ivoire);color:var(--texte-clair)}
+.rose{background:linear-gradient(180deg,var(--ivoire),#f1dfe1);color:var(--texte-clair)}
+.nocturne{background:radial-gradient(ellipse at 50% 40%,#2a1c26 0%,var(--nuit) 70%);overflow:hidden}
+.bordeaux{background:radial-gradient(circle at 80% 10%,rgba(215,183,122,.18),transparent 40%),var(--bordeaux)}
+.ivoire h2,.rose h2{color:var(--bordeaux)}
+.sombre-texte{color:var(--texte-sombre)}
+.indice{position:absolute;bottom:calc(2rem + var(--safe-bottom));left:50%;transform:translateX(-50%);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;opacity:.6;animation:flotte 3s ease-in-out infinite}
+@keyframes flotte{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,6px)}}
+
+/* Section 3 : constellation */
+.constellation{position:relative;height:120px;margin:0 auto 2rem;max-width:420px;width:100%}
+.constellation .point{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:var(--or);box-shadow:0 0 18px 4px rgba(215,183,122,.5);transform:translateY(-50%)}
+.constellation .point.g{left:8%}.constellation .point.d{right:8%}
+.constellation .fil{position:absolute;left:12%;right:12%;top:50%;height:1px;background:linear-gradient(90deg,transparent,var(--or),transparent);opacity:.5}
+.constellation .fil::after{content:"";position:absolute;left:50%;top:-2px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--rose);animation:voyage 6s ease-in-out infinite}
+@keyframes voyage{0%,100%{left:10%}50%{left:88%}}
+
+/* Section 4 : cartes */
+.cartes{display:grid;grid-template-columns:1fr;gap:1rem;margin-top:2rem}
+@media (min-width:640px){.cartes{grid-template-columns:1fr 1fr}}
+.carte{border:1px solid rgba(215,183,122,.35);border-radius:14px;background:rgba(248,240,232,.04);padding:1.3rem 1.4rem;text-align:left;width:100%;transition:background .5s,border-color .5s}
+.carte:hover,.carte[aria-expanded="true"]{background:rgba(248,240,232,.09);border-color:var(--or)}
+.carte .icone{width:34px;height:34px;margin-bottom:.6rem;color:var(--or)}
+.carte h3{font-size:1.45rem;margin:0}
+.carte .corps{max-height:0;overflow:hidden;transition:max-height .8s ease,opacity .8s ease;opacity:0}
+.carte[aria-expanded="true"] .corps{max-height:12rem;opacity:1;margin-top:.7rem}
+
+/* Section 6 : enveloppe */
+.enveloppe-zone{display:flex;flex-direction:column;align-items:center;gap:1.5rem}
+.enveloppe{position:relative;width:min(340px,86vw);height:220px;perspective:900px}
+.enveloppe .corps-env{position:absolute;inset:0;background:linear-gradient(160deg,#fbf6ee,#efe3d2);border-radius:6px;box-shadow:0 18px 40px rgba(0,0,0,.25)}
+.enveloppe .rabat{position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,#f6ecdf,#e9d9c4);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform 1s ease;z-index:3}
+.enveloppe .texte-env{position:absolute;left:0;right:0;bottom:22px;text-align:center;color:var(--texte-clair);font-family:var(--serif);font-style:italic;font-size:1.05rem;padding:0 1rem;z-index:2}
+.enveloppe.ouverte .rabat{transform:rotateX(180deg)}
+.enveloppe.ouverte .texte-env{opacity:0;transition:opacity .4s}
+.lettre{max-width:640px;width:100%;background:#fbf6ee;color:var(--texte-clair);padding:clamp(1.5rem,5vw,3rem);border-radius:4px;box-shadow:0 20px 50px rgba(0,0,0,.3);font-family:var(--serif);font-size:clamp(1.1rem,3.2vw,1.3rem);line-height:1.75;max-height:0;overflow:hidden;opacity:0;transform:translateY(20px);transition:max-height 1.4s ease,opacity 1.2s ease .4s,transform 1.2s ease .4s;word-wrap:break-word}
+.lettre.ouverte{max-height:4000px;opacity:1;transform:none}
+.lettre p{margin:0 0 1em}
+.lettre .signature{font-style:italic;text-align:right;margin-top:1.5rem}
+
+/* Section 7 : galerie */
+.galerie{display:grid;grid-template-columns:repeat(2,1fr);gap:.9rem;margin-top:2rem}
+@media (min-width:700px){.galerie{grid-template-columns:repeat(3,1fr)}}
+.case{aspect-ratio:3/4;border:1px dashed rgba(215,183,122,.5);border-radius:10px;background:linear-gradient(160deg,rgba(232,198,204,.14),rgba(215,183,122,.06));display:flex;align-items:center;justify-content:center;padding:.8rem;text-align:center;font-family:var(--serif);font-style:italic;font-size:.95rem;opacity:.85;transition:opacity .4s,transform .4s,border-color .4s;width:100%}
+.case:hover{opacity:1;transform:translateY(-3px);border-color:var(--or)}
+.case img{width:100%;height:100%;object-fit:cover;border-radius:9px}
+dialog{border:1px solid var(--or);border-radius:14px;background:var(--nuit);color:var(--texte-sombre);max-width:min(520px,92vw);padding:1.6rem;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+dialog::backdrop{background:rgba(10,8,12,.75)}
+dialog h3{color:var(--or)}
+dialog .fermer{margin-top:1rem}
+
+/* Section 8 : enveloppes à toucher */
+.jeu{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin:2rem 0}
+.jeu button{width:76px;height:76px;border-radius:50%;border:1px solid var(--or);background:radial-gradient(circle,rgba(215,183,122,.25),rgba(215,183,122,.04));font-family:var(--serif);font-size:1.6rem;color:var(--or);transition:transform .4s,background .4s}
+.jeu button:hover{transform:scale(1.05)}
+.jeu button.ouvert{background:var(--or);color:var(--nuit)}
+#messages p{font-family:var(--serif);font-style:italic;font-size:clamp(1.2rem,3.8vw,1.6rem);opacity:0;transition:opacity 1s ease;min-height:0}
+#messages p.visible{opacity:1}
+#fin-jeu{opacity:0;transition:opacity 1.4s ease;margin-top:1.5rem}
+#fin-jeu.visible{opacity:1}
+
+/* Section 10 */
+.derniere-phrase{font-family:var(--serif);font-size:clamp(1.9rem,6vw,3.4rem);font-style:italic;line-height:1.3;opacity:0;transition:opacity 2s ease}
+.derniere-phrase.visible{opacity:1}
+.etoiles-fond{position:absolute;inset:0;pointer-events:none}
+
+/* Mouvement réduit */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal,.derniere-phrase,#intro .texte,#intro .btn,.lettre{opacity:1!important;transform:none!important}
+  .carte .corps{max-height:none;opacity:1}
+}
+</style>
+</head>
+<body>
+
+<div id="progress" aria-hidden="true"></div>
+
+<nav id="nav" aria-label="Sections">
+  <a href="#s1" aria-label="Entrée"></a>
+  <a href="#s2" aria-label="Première lettre"></a>
+  <a href="#s3" aria-label="Distance"></a>
+  <a href="#s4" aria-label="Petites choses"></a>
+  <a href="#s5" aria-label="Si j'étais près de toi"></a>
+  <a href="#s6" aria-label="Lettre"></a>
+  <a href="#s7" aria-label="Fragments"></a>
+  <a href="#s8" aria-label="Jeu"></a>
+  <a href="#s9" aria-label="Promesse"></a>
+  <a href="#s10" aria-label="Fin"></a>
+</nav>
+
+<button id="musique" type="button" aria-pressed="false">♪ Musique</button>
+<audio id="audio" loop preload="none"></audio>
+
+<!-- Intro -->
+<div id="intro" role="dialog" aria-label="Introduction">
+  <p class="texte" id="intro-1">J'ai quelque chose pour toi…</p>
+  <p class="texte petit" id="intro-2">Quelque chose que je ne voulais pas simplement écrire dans un message.</p>
+  <button class="btn" id="entrer" type="button">Entre, mon amour ♡</button>
+</div>
+
+<main>
+
+<!-- SECTION 2 : première lettre -->
+<section id="s1" class="nocturne centre" aria-label="Accueil">
+  <div class="container">
+    <p class="reveal italique" style="font-size:1.1rem;opacity:.7">Pour toi</p>
+    <h1 class="reveal d1">Même à des kilomètres, c'est toujours toi.</h1>
+  </div>
+  <div class="indice" aria-hidden="true">défile ↓</div>
+</section>
+
+<section id="s2" class="nocturne centre" aria-label="La première lettre">
+  <div class="container">
+    <p class="reveal" style="font-family:var(--serif);font-size:clamp(1.7rem,5vw,2.8rem);line-height:1.35;font-style:italic">Parmi toutes les personnes que la vie aurait pu mettre sur mon chemin, il y a toi.</p>
+    <p class="reveal d2" style="margin-top:2rem;font-size:clamp(1.05rem,3vw,1.2rem);opacity:.85">Et même si les kilomètres nous empêchent parfois de partager les choses les plus simples, ils ne changent pas la place que tu occupes dans mon cœur.</p>
+  </div>
+  <div class="indice" aria-hidden="true">défile ↓</div>
+</section>
+
+<!-- SECTION 3 : ce que la distance ne peut pas effacer -->
+<section id="s3" class="nocturne centre" aria-label="Ce que la distance ne peut pas effacer">
+  <div class="container">
+    <div class="constellation reveal" aria-hidden="true"><span class="point g"></span><span class="fil"></span><span class="point d"></span></div>
+    <p class="reveal" style="font-size:clamp(1.2rem,3.6vw,1.5rem)">Il y a des jours où j'aimerais simplement être près de toi.</p>
+    <p class="reveal d1" style="font-size:clamp(1.1rem,3.2vw,1.3rem);opacity:.85">Pas pour faire quelque chose d'extraordinaire.</p>
+    <p class="reveal d2" style="font-size:clamp(1.05rem,3vw,1.2rem);opacity:.8">Juste pour te regarder, te prendre dans mes bras, entendre ta voix sans écran entre nous et profiter de ces petits instants que la distance rend précieux.</p>
+    <p class="reveal d3 italique" style="font-size:clamp(1.4rem,4.5vw,2rem);margin-top:2.2rem">Je ne peux pas toujours être près de toi physiquement. Mais tu es quelqu'un que je porte avec moi, même lorsque nous sommes loin l'un de l'autre.</p>
+  </div>
+</section>
+
+<!-- SECTION 4 : cartes -->
+<section id="s4" class="ivoire" aria-label="Les petites choses qui comptent">
+  <div class="container centre">
+    <h2 class="reveal">Si tu pouvais voir ce que mon cœur garde pour toi…</h2>
+    <div class="cartes reveal d1">
+      <button class="carte" aria-expanded="false" type="button">
+        <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M4 13c2 3 6 4 8 4s6-1 8-4"/><path d="M12 3v2M5 6l1.4 1.4M19 6l-1.4 1.4"/></svg>
+        <h3>Ton sourire</h3>
+        <div class="corps"><p>Il y a des sourires qui illuminent une journée. Le tien a cette place particulière dans mon cœur que les mots expliquent difficilement.</p></div>
+      </button>
+      <button class="carte" aria-expanded="false" type="button">
+        <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+        <h3>Ta présence</h3>
+        <div class="corps"><p>Même à travers un écran, tu peux rendre un moment différent. Et c'est quelque chose que je ne veux jamais considérer comme banal.</p></div>
+      </button>
+      <button class="carte" aria-expanded="false" type="button">
+        <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M4 6h16v10H8l-4 3z"/></svg>
+        <h3>Nos petits moments</h3>
+        <div class="corps"><p>Je veux garder une place pour les conversations qui durent, les petites blagues, les nouvelles de ta journée et tous ces instants ordinaires qui deviennent précieux quand ils sont partagés avec toi.</p></div>
+      </button>
+      <button class="carte" aria-expanded="false" type="button">
+        <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M3 20 12 4l9 16z"/><path d="M12 10v6"/></svg>
+        <h3>Notre avenir</h3>
+        <div class="corps"><p>J'espère que nous aurons encore beaucoup de souvenirs à construire, de choses à découvrir ensemble et de moments où nous n'aurons plus besoin de compter les kilomètres.</p></div>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5 : si j'étais près de toi -->
+<section id="s5" class="rose centre" aria-label="Si j'étais près de toi">
+  <div class="container">
+    <h2 class="reveal">Si j'étais près de toi en ce moment…</h2>
+    <p class="reveal d1 italique" style="font-size:clamp(1.3rem,4vw,1.8rem)">Je ne chercherais pas forcément les mots parfaits.</p>
+    <p class="reveal d2 italique" style="font-size:clamp(1.3rem,4vw,1.8rem)">Je voudrais juste être là.</p>
+    <p class="reveal d3 italique" style="font-size:clamp(1.3rem,4vw,1.8rem)">Te prendre dans mes bras.</p>
+    <p class="reveal italique" style="font-size:clamp(1.2rem,3.6vw,1.6rem);margin-top:1.4rem">Te demander comment tu vas, t'écouter vraiment et profiter du bonheur tout simple de pouvoir être à côté de toi.</p>
+    <p class="reveal" style="margin-top:2.4rem;font-size:clamp(1.1rem,3.2vw,1.3rem);color:var(--bordeaux)">Parfois, ce sont les choses les plus simples qui me manquent le plus.</p>
+  </div>
+</section>
+
+<!-- SECTION 6 : lettre -->
+<section id="s6" class="nocturne centre" aria-label="Une lettre que tu peux ouvrir">
+  <div class="container enveloppe-zone">
+    <p class="reveal" style="font-family:var(--serif);font-style:italic;font-size:clamp(1.2rem,3.6vw,1.5rem)">Pour toi, mon amour. À ouvrir quand tu en as envie.</p>
+    <div class="enveloppe reveal d1" id="env">
+      <div class="corps-env"></div>
+      <div class="rabat"></div>
+      <div class="texte-env">Pour toi, mon amour.<br>À ouvrir quand tu en as envie.</div>
+    </div>
+    <button class="btn reveal d2" id="ouvrir-lettre" type="button" aria-expanded="false" aria-controls="lettre">Ouvrir ma lettre</button>
+    <article class="lettre" id="lettre" aria-live="polite">
+      <p>Mon amour,</p>
+      <p>Il y a des choses que je ressens et que je n'arrive pas toujours à exprimer exactement comme je le voudrais.</p>
+      <p>Alors aujourd'hui, j'avais envie de prendre le temps de te laisser quelque chose que tu pourrais relire quand tu en aurais envie.</p>
+      <p>Je veux que tu saches que tu comptes pour moi. Pas seulement dans les grands moments, pas seulement quand tout est facile, mais aussi dans les journées ordinaires, dans les petites conversations, dans les moments où tu me racontes ce que tu as vécu et dans tous ces instants qui composent notre histoire.</p>
+      <p>Je sais que la distance n'est pas toujours facile. Il y a tellement de choses que j'aimerais pouvoir partager avec toi sans devoir passer par un écran. Des gestes simples, des regards, des câlins et des moments où le silence lui-même serait agréable parce que nous serions simplement ensemble.</p>
+      <p>Je ne prétends pas être parfait. Je sais que les sentiments les plus sincères ont aussi besoin de se traduire dans nos gestes, notre écoute et notre manière de prendre soin l'un de l'autre.</p>
+      <p>Mais je veux continuer à apprendre, à mieux te comprendre et à construire avec toi quelque chose qui nous fasse du bien à tous les deux.</p>
+      <p>Je ne veux pas que tu aies besoin d'une occasion spéciale pour te rappeler que tu es importante pour moi. J'aimerais que tu puisses le ressentir dans les petites choses, dans mes attentions et dans la place que je te fais dans ma vie.</p>
+      <p>Si je pouvais être près de toi maintenant, je te serrerais simplement dans mes bras et je te laisserais comprendre, sans avoir besoin de beaucoup de mots, à quel point tu es précieuse pour moi.</p>
+      <p>En attendant de pouvoir le faire, je t'envoie ces quelques mots, avec tout l'amour que j'ai envie de partager avec toi.</p>
+      <p>Merci d'être cette personne avec qui j'ai envie de continuer à écrire des souvenirs.</p>
+      <p>Je t'aime. Et j'espère que tu le ressentiras un peu plus chaque jour, à travers les mots, mais surtout à travers les choses que nous construirons ensemble.</p>
+      <p>À toi, avec tendresse. ♡</p>
+      <p class="signature">Ton amoureux. Toujours avec tendresse.</p>
+    </article>
+  </div>
+</section>
+
+<!-- SECTION 7 : galerie -->
+<section id="s7" class="ivoire" aria-label="Quelques fragments de nous">
+  <div class="container centre">
+    <h2 class="reveal">Quelques fragments de nous.</h2>
+    <div class="galerie reveal d1">
+      <button class="case" type="button" data-titre="Un beau moment" data-legende="Une photo qui nous rappelle un beau moment.">Une photo qui nous rappelle un beau moment</button>
+      <button class="case" type="button" data-titre="Un souvenir" data-legende="Un souvenir qui me fait sourire.">Un souvenir qui me fait sourire</button>
+      <button class="case" type="button" data-titre="Un message" data-legende="Un message que j'ai envie de garder.">Un message que j'ai envie de garder</button>
+      <button class="case" type="button" data-titre="Un moment proche" data-legende="Un moment où je me suis senti particulièrement proche de toi.">Un moment où je me suis senti proche de toi</button>
+      <button class="case" type="button" data-titre="Un rêve" data-legende="Un rêve que j'aimerais partager avec toi.">Un rêve que j'aimerais partager avec toi</button>
+      <button class="case" type="button" data-titre="Notre histoire" data-legende="Une petite chose qui représente notre histoire.">Une petite chose qui représente notre histoire</button>
+    </div>
+    <p class="reveal d2" style="font-size:.9rem;opacity:.6;margin-top:1.5rem">Touche un élément pour l'ouvrir.</p>
+  </div>
+  <dialog id="fenetre" aria-labelledby="fen-titre">
+    <h3 id="fen-titre"></h3>
+    <p id="fen-legende"></p>
+    <button class="btn fermer" type="button" id="fermer-fen">Fermer</button>
+  </dialog>
+</section>
+
+<!-- SECTION 8 : jeu -->
+<section id="s8" class="nocturne centre" aria-label="J'ai caché quelques mots pour toi">
+  <div class="container">
+    <h2 class="reveal">J'ai caché quelques mots pour toi.</h2>
+    <div class="jeu reveal d1" role="group" aria-label="Enveloppes à ouvrir">
+      <button type="button" data-i="0" aria-label="Message 1">✦</button>
+      <button type="button" data-i="1" aria-label="Message 2">✦</button>
+      <button type="button" data-i="2" aria-label="Message 3">✦</button>
+      <button type="button" data-i="3" aria-label="Message 4">✦</button>
+      <button type="button" data-i="4" aria-label="Message 5">✦</button>
+    </div>
+    <div id="messages" aria-live="polite" style="min-height:4rem">
+      <p data-m="0">Tu n'as pas besoin d'être parfaite pour être précieuse à mes yeux.</p>
+      <p data-m="1">Tu mérites d'être écoutée, comprise et aimée avec sincérité.</p>
+      <p data-m="2">Même les journées ordinaires peuvent devenir de beaux souvenirs quand on les partage.</p>
+      <p data-m="3">Je veux que notre amour se ressente aussi dans les gestes, pas seulement dans les mots.</p>
+      <p data-m="4">Si je devais choisir une nouvelle fois de découvrir notre histoire, je voudrais encore prendre le temps de te connaître, de te comprendre et de voir où la vie nous mène ensemble.</p>
+    </div>
+    <p id="fin-jeu" style="font-family:var(--serif);font-style:italic;font-size:clamp(1.1rem,3.4vw,1.4rem);margin-top:2rem">Voilà quelques petites choses que je voulais te confier. Et il y en a encore tellement que les mots ne savent pas expliquer.</p>
+  </div>
+</section>
+
+<!-- SECTION 9 : promesse -->
+<section id="s9" class="bordeaux centre" aria-label="Ce que j'aimerais construire avec toi">
+  <div class="container">
+    <h2 class="reveal">Ce que j'aimerais construire avec toi.</h2>
+    <ul style="list-style:none;padding:0;margin:2rem 0;font-family:var(--serif);font-size:clamp(1.2rem,3.6vw,1.5rem);line-height:1.5">
+      <li class="reveal d1" style="margin-bottom:1.4rem">T'écouter avec attention, même lorsque je ne comprends pas immédiatement ce que tu ressens.</li>
+      <li class="reveal d2" style="margin-bottom:1.4rem">Continuer à te montrer, par mes gestes autant que par mes paroles, que notre relation compte pour moi.</li>
+      <li class="reveal d3">Construire quelque chose dans lequel nous pouvons être nous-mêmes, parler honnêtement et nous sentir aimés sans avoir à être parfaits.</li>
+    </ul>
+    <p class="reveal italique" style="font-size:clamp(1.2rem,3.6vw,1.5rem);opacity:.9">Je ne peux pas promettre que chaque jour sera facile. Mais je peux choisir de continuer à apprendre, à faire des efforts sincères et à prendre soin de ce que nous partageons.</p>
+  </div>
+</section>
+
+<!-- SECTION 10 : dernier écran -->
+<section id="s10" class="nocturne centre" aria-label="Le dernier écran">
+  <div class="etoiles-fond" aria-hidden="true" id="etoiles"></div>
+  <div class="container" style="position:relative">
+    <p class="reveal" id="p1" style="font-family:var(--serif);font-style:italic;font-size:clamp(1.3rem,4vw,1.8rem);opacity:0;transition:opacity 2s ease">Si tu ne devais retenir qu'une seule chose de cette petite surprise…</p>
+    <p class="derniere-phrase" id="p2" style="margin-top:2.5rem;font-size:clamp(1.1rem,3.4vw,1.4rem);font-style:normal;font-family:var(--sans);font-weight:300;line-height:1.7;opacity:0">Ce n'est pas seulement la distance que j'aimerais réduire. C'est aussi tous les moments où je voudrais pouvoir te montrer, de la manière la plus simple et la plus sincère, la place que tu as dans ma vie.</p>
+    <p class="derniere-phrase" id="p3" style="margin-top:3rem">Parmi tous les endroits où je pourrais être, il y en a un où j'aimerais souvent me retrouver : près de toi.</p>
+    <p class="derniere-phrase" id="p4" style="margin-top:2rem;font-size:clamp(1.1rem,3.4vw,1.4rem);font-style:normal;font-family:var(--sans);font-weight:300">Jusqu'à ce que les kilomètres nous laissent enfin partager davantage de ces petits moments, garde cette petite partie de mon cœur près du tien.</p>
+    <p class="derniere-phrase" id="p5" style="margin-top:2.5rem;font-size:clamp(1.6rem,5vw,2.4rem)">Je t'aime, mon amour. ♡</p>
+    <button class="btn" id="relire" type="button" style="opacity:.6;margin-top:3rem">Relire depuis le début</button>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+  // Configuration simple : modifie ici les textes, la musique et les souvenirs
+  var CONFIG = { musique: "" }; // ex. "musique/piano.mp3" (fichier libre de droits ou autorisé)
+
+  var reduit = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Étoiles discrètes (intro et dernier écran)
+  function etoiles(conteneur, n){
+    if(!conteneur) return;
+    for(var i=0;i<n;i++){
+      var e=document.createElement("span");
+      e.className="etoile";
+      e.style.left=Math.random()*100+"%";
+      e.style.top=Math.random()*100+"%";
+      e.style.opacity=(0.2+Math.random()*0.6).toFixed(2);
+      e.style.transform="scale("+(0.6+Math.random()*1.2).toFixed(2)+")";
+      conteneur.appendChild(e);
+    }
+  }
+  var intro=document.getElementById("intro");
+  etoiles(intro,70);
+  etoiles(document.getElementById("etoiles"),60);
+
+  // Intro : textes qui apparaissent puis bouton
+  var i1=document.getElementById("intro-1"), i2=document.getElementById("intro-2"), btn=document.getElementById("entrer");
+  function montrer(el,delai){ setTimeout(function(){ el.classList.add("visible"); }, delai); }
+  if(reduit){ [i1,i2,btn].forEach(function(e){e.classList.add("visible");}); }
+  else { montrer(i1,400); montrer(i2,2800); montrer(btn,4300); }
+
+  btn.addEventListener("click", function(){
+    intro.classList.add("sortie");
+    setTimeout(function(){ intro.style.display="none"; }, reduit?0:1700);
+    if(CONFIG.musique){ document.getElementById("musique").classList.add("actif"); }
+    document.getElementById("s1").scrollIntoView({behavior: reduit?"auto":"smooth"});
+  });
+
+  // Apparitions au défilement
+  var ro=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add("in"); ro.unobserve(en.target);} });
+  },{threshold:0.2});
+  document.querySelectorAll(".reveal").forEach(function(el){ reduit? el.classList.add("in") : ro.observe(el); });
+
+  // Dernier écran : phrases successives
+  var fin=document.getElementById("s10");
+  var fins=["p1","p2","p3","p4","p5"].map(function(id){return document.getElementById(id);});
+  var deja=false;
+  var ro2=new IntersectionObserver(function(en){
+    if(en[0].isIntersecting && !deja){
+      deja=true;
+      fins.forEach(function(el,k){ setTimeout(function(){ el.style.opacity=1; }, reduit?0:k*2200+600); });
+    }
+  },{threshold:0.5});
+  ro2.observe(fin);
+
+  // Barre de progression et navigation
+  var prog=document.getElementById("progress");
+  var liens=document.querySelectorAll("#nav a");
+  window.addEventListener("scroll",function(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    prog.style.width=(max>0? (h.scrollTop/max)*100 : 0)+"%";
+  },{passive:true});
+  var ro3=new IntersectionObserver(function(en){
+    en.forEach(function(e){
+      if(e.isIntersecting){
+        liens.forEach(function(a){ a.classList.toggle("actif", a.getAttribute("href")==="#"+e.target.id); });
+      }
+    });
+  },{threshold:0.5});
+  document.querySelectorAll("main section").forEach(function(s){ ro3.observe(s); });
+
+  // Cartes interactives
+  document.querySelectorAll(".carte").forEach(function(c){
+    c.addEventListener("click", function(){
+      var ouvert = c.getAttribute("aria-expanded")==="true";
+      c.setAttribute("aria-expanded", ouvert?"false":"true");
+    });
+  });
+
+  // Lettre
+  var env=document.getElementById("env"), lettreBtn=document.getElementById("ouvrir-lettre"), lettre=document.getElementById("lettre");
+  lettreBtn.addEventListener("click", function(){
+    var ouvert = lettre.classList.toggle("ouverte");
+    env.classList.toggle("ouverte", ouvert);
+    lettreBtn.setAttribute("aria-expanded", ouvert?"true":"false");
+    lettreBtn.textContent = ouvert ? "Refermer la lettre" : "Ouvrir ma lettre";
+    if(ouvert && !reduit){ setTimeout(function(){ lettre.scrollIntoView({behavior:"smooth",block:"center"}); }, 700); }
+  });
+  env.addEventListener("click", function(){ lettreBtn.click(); });
+
+  // Galerie : fenêtres
+  var fen=document.getElementById("fenetre");
+  document.querySelectorAll(".case").forEach(function(c){
+    c.addEventListener("click", function(){
+      document.getElementById("fen-titre").textContent=c.dataset.titre;
+      document.getElementById("fen-legende").textContent=c.dataset.legende;
+      if(fen.showModal) fen.showModal(); else fen.setAttribute("open","");
+    });
+  });
+  document.getElementById("fermer-fen").addEventListener("click", function(){ fen.close ? fen.close() : fen.removeAttribute("open"); });
+
+  // Jeu des messages : aucun compteur, aucune obligation
+  var ouverts=0;
+  document.querySelectorAll(".jeu button").forEach(function(b){
+    b.addEventListener("click", function(){
+      if(b.classList.contains("ouvert")) return;
+      b.classList.add("ouvert");
+      var p=document.querySelector('#messages p[data-m="'+b.dataset.i+'"]');
+      p.classList.add("visible");
+      ouverts++;
+      if(ouverts===5){ document.getElementById("fin-jeu").classList.add("visible"); }
+    });
+  });
+
+  // Musique facultative (jamais de lecture automatique)
+  var audio=document.getElementById("audio"), mus=document.getElementById("musique");
+  if(CONFIG.musique){
+    audio.src=CONFIG.musique;
+    mus.addEventListener("click", function(){
+      if(audio.paused){ audio.play().catch(function(){}); mus.textContent="❚❚ Pause"; mus.setAttribute("aria-pressed","true"); }
+      else { audio.pause(); mus.textContent="♪ Musique"; mus.setAttribute("aria-pressed","false"); }
+    });
+  }
+
+  // Relire depuis le début
+  document.getElementById("relire").addEventListener("click", function(){
+    window.scrollTo({top:0, behavior: reduit?"auto":"smooth"});
+  });
+})();
+</script>
+</body>
+</html>
